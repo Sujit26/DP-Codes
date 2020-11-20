@@ -1,0 +1,51 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+int dp[10000][10000];
+
+int knapsack(vector<int> wt,vector<int> price,int w,int n){
+    if(w==0 || n==0)
+        return 0;
+    if( dp[n][n]!=-1)
+        return dp[n][n];
+    
+    if(w<wt[n])
+        return dp[n][w] = knapsack(wt,price,w,n-1);
+    else
+        return dp[n][w] = max(price[n] + knapsack(wt,price,w-wt[n],n-1),knapsack(wt,price,w,n-1));
+    
+    
+}
+int main() {
+	int t;
+	cin>>t;
+
+	while(t--){
+	    int n,W;
+        memset(dp,-1,sizeof(dp));
+
+	    cin>>n>>W;
+	    vector<int> wt;
+	    vector<int> price;
+	    int temp;
+	    for(int i=0;i<n;i++){
+	        cin>>temp;
+	        wt.push_back(temp);
+	    }
+	    for(int i=0;i<n;i++){
+	        cin>>temp;
+	        price.push_back(temp);
+	    }
+	    int maxProfit = knapsack(wt,price,W,n);
+	    cout<<maxProfit<<endl;
+        for(int i=0;i<n;i++){
+            for(int j=0;j<n;j++){
+                cout<<dp[i][j]<<"\t";
+            }
+            cout<<endl;
+        }
+	}
+	return 0;
+}
